@@ -82,17 +82,17 @@ REM ZIP FILE PASSWORD
 
 REM DATABASE CONFIGURATION
 
-	SET HOST=localhost
-	SET USER=paulodev_clime
-	SET PASSWORD=senhaclime123
-	SET DATABASE=paulodev_clime_db
+	SET HOST=DatabaseHost
+	SET USER=DatabaseUser
+	SET PASSWORD=DatabasePassword
+	SET DATABASE=DatabaseName
 	SET ENCODING=utf8
 
 REM GENERATED FILES DESTINATION
+REM (using the working directory, but you can
+REM change)
 
 	SET FOLDER=%WORKINGDIR%
-
-
 
 
 REM ################# EXECUTION #################
