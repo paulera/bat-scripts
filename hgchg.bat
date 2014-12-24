@@ -1,8 +1,3 @@
-::
-:: TODO: option projectname
-:: TODO: * on the name of the default projects
-:: TODO: better manage the variables inside functions, cleaning them after use, instead of just in the end
-::
 @setlocal enableextensions enabledelayedexpansion
 @set DEBUG=&rem
 @set RAWDEBUG=&rem
