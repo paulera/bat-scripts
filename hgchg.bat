@@ -334,7 +334,7 @@ goto:eof
 	echo.
 	echo hgchg.bat: List changes in all Tortoise HG projects
 	echo author: paulo amaral
-	echo version date: 2014-12-17
+	echo version date: 2015-01-07
 	echo.
 	echo Syntax: hgchg  [/me]  [/u ^<username^> ...]  [ [/sd ^<start date^>] [/fd ^<final date^>] ^| [/rd ^<-X days^>] ]  [/w ^<word^> ...]  [/wo ^<word^> ...]  [/rev]  [/age]  [/c]  [/min]  [/tab]  [/clip]  [/o ^<outputfile^>]  [/help]
 	echo.
