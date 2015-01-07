@@ -1,4 +1,5 @@
 @setlocal enableextensions enabledelayedexpansion
+@set LC_ALL='C'
 @set DEBUG=&rem
 @set RAWDEBUG=&rem
 @set PARAMS="%*"
