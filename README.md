@@ -27,7 +27,7 @@ Syntax: hgchg   [/me]
 
 **USERS**
 <table>
-<tr><td><b>/u</b> username</td><td>Show changes only for specific users./u can be used many times. ex: hgchg/u user1/u user2/u user3</td></tr>
+<tr><td width="120"><b>/u</b> username</td><td>Show changes only for specific users./u can be used many times. ex: hgchg/u user1/u user2/u user3</td></tr>
 <tr><td><b>/me</b> or <b>/1</b></td><td>Show changes for the current logged user.</td></tr>
 </table>
 
@@ -43,7 +43,7 @@ Syntax: hgchg   [/me]
 
 **LIST STYLE**
 <table>
-<tr><td><b>/rev or <b>/r</b></td><td>Show revision number</td></tr>
+<tr><td width="120"><b>/rev or <b>/r</b></td><td>Show revision number</td></tr>
 <tr><td><b>/age</b> or <b>/a</b></td><td>Show age, e.g. "10 hours ago", "2 weeks ago"</td></tr>
 <tr><td><b>/c</b></td><td>Show commit comments (first line only)</td></tr>
 <tr><td><b>/time</b></td><td>Show the time with the date</td></tr>
