@@ -1,5 +1,7 @@
 @echo off
-
+call:init %1
+call:config %1
+call:exec %1
 
 ::::: REMEMBER TO SETUP THE "CONFIGURATION" SECTION
 
@@ -29,125 +31,144 @@
 ::::: #######################################################
 
 
+:config
 
-::::: ############ CONFIGURATION ############
-::::: #                                     #
-::::: # Change the values in this section   #
-::::: # to adapt the script to your project #
-::::: #                                     #
-::::: #######################################
+	::::: ############ CONFIGURATION ############
+	::::: #                                     #
+	::::: # Change the values in this section   #
+	::::: # to adapt the script to your project #
+	::::: #                                     #
+	::::: #######################################
+	
+	
+	::::: PREFIX
+	::::: just something that goes at the start in the filename
+	SET PREFIX=pdev-db
+	
+	::::: ZIP FILE PASSWORD
+	::::: comment this line (or unset ZIP_PWD) to
+	::::: be asked everytime - recommended
+	::	SET ZIP_PWD=PasswordForZipFileHere
 
-
-::::: PREFIX
-::::: just something that goes at the start in the filename
-
-SET PREFIX=dump-
-
-::::: ZIP FILE PASSWORD
-::::: comment this line to be asked everytime
-::::: you run this script
-
-::	SET ZIP_PWD=PasswordForZipFileHere
-
-::::: DATABASE CONFIGURATION
-
+	::::: DATABASE CONFIGURATION
 	SET HOST=HostNameHere
 	SET USER=DatabaseUsernameHere
 	SET PASSWORD=DatabasePasswordHere
 	SET DATABASE=DatabaseNameHere
 	SET ENCODING=utf8
-
-::::: GENERATED FILES DESTINATION
-::::: (using the working directory, but you can
-::::: change)
-
+	
+	::::: GENERATED FILES DESTINATION
+	::::: (use %WORKINGDIR% for the working directory)
 	SET FOLDER=%WORKINGDIR%
-
-
-
-
-
-::::: ############### INITIALIZATION ###############
-::::: #                                            #
-::::: # Changes in this section are not encouraged #
-::::: # unless you know what you are doing         #
-::::: #                                            #
-::::: ##############################################
-
-
-
-
-::::: GETS DATE AND TIME TO BUILD THE FILENAME
-
-	For /f "tokens=1-4 delims=/ " %%a in ('date /t') do (set DT=%%c%%b%%a)
-	For /f "tokens=1-3 delims=/:" %%a in ('echo %TIME:~0,8%') do (set TM=%%a%%b%%c)
 	
-	IF "%1" == "" (
-		SET FILENAME=%PREFIX%%DT%-%TM%
-	) ELSE (
-		SET FILENAME=%PREFIX%%DT%-%TM%-%1
-	)
+	::::: ########### CONFIGURATION END ###########
+
+GOTO:eof
+
+
+
+
+
+
+:init
+
+	::::: ############### INITIALIZATION ###############
+	::::: #                                            #
+	::::: # Changes in this section are not encouraged #
+	::::: # unless you know what you are doing         #
+	::::: #                                            #
+	::::: ##############################################
 	
 	
-	SET EXTZIP=.zip
-	SET EXTSQL=.sql
-
-::::: GET BAT LOCATION
-
-	SET mypath=%~dp0
-	SET WORKINGDIR=%mypath:~0,-1%
-
-::::: LOOK FOR 7ZA.EXE (7-ZIP COMMAND LINE VERSION)
-
-	IF NOT EXIST "%WORKINGDIR%\7za.exe" GOTO 7za_not_found
-
-
-::::: ################# EXECUTION #################
-::::: #                                           #
-::::: # Changes in this section are not recommend #
-::::: # unless you know what you are doing        #
-::::: #                                           #
-::::: #############################################
-
-
-::::: GENERATE THE RAW DUMP
-
-	echo.
-	echo Generating database DUMP ...
-	mysqldump -u%USER% -p%PASSWORD% -h%HOST% --default-character-set=%ENCODING% --add-drop-table --opt %DATABASE% -r "%FOLDER%\%FILENAME%%EXTSQL%"
-
-	IF NOT EXIST "%FOLDER%\%FILENAME%%EXTSQL%" GOTO dump_error
-
-	echo DUMP succesfully generated!!!
-
-::::: COMPRESS DUMP IN A PASSWORD PROTECTED ZIP FILE
-
-	echo.
-	echo Compressing dump ...
-	cd %FOLDER%
-	IF "%ZIP_PWD%" == "" (
-		"%WORKINGDIR%\7za.exe" -mx9 -p a "%FOLDER%\%FILENAME%%EXTZIP%" "%FOLDER%\%FILENAME%%EXTSQL%"
-	) ELSE (
-		"%WORKINGDIR%\7za.exe" -mx9 -p%ZIP_PWD% a "%FOLDER%\%FILENAME%%EXTZIP%" "%FOLDER%\%FILENAME%%EXTSQL%"
-	)
+	::::: GETS DATE AND TIME TO BUILD THE FILENAME
 	
+		For /f "tokens=1-4 delims=/ " %%a in ('date /t') do (set DT=%%c%%b%%a)
+		For /f "tokens=1-3 delims=/:" %%a in ('echo %TIME:~0,8%') do (set TM=%%a%%b%%c)
+		
+		IF "%1" == "" (
+			SET FILENAME=%PREFIX%-%DT%-%TM%
+		) ELSE (
+			SET FILENAME=%PREFIX%-%DT%-%TM%-%1
+		)
 
-	IF NOT EXIST "%FOLDER%\%FILENAME%%EXTSQL%" GOTO zip_error
+		SET EXTZIP=.zip
+		SET EXTSQL=.sql
+	
+	::::: GET BAT LOCATION
+	
+		SET mypath=%~dp0
+		SET WORKINGDIR=%mypath:~0,-1%
+	
+	::::: LOOK FOR 7ZA.EXE (7-ZIP COMMAND LINE VERSION)
+	
+		IF NOT EXIST "%WORKINGDIR%\7za.exe" GOTO 7za_not_found
 
-	echo DUMP succesfully compressed
+GOTO:eof
 
-::::: DELETE THE RAW DUMP, LEAVING ONLY THE PROTECTED ZIP FILE
 
-	echo.
-	echo Deleting DUMP raw file...
-	del "%FOLDER%\%FILENAME%%EXTSQL%"
 
-	echo.
-	echo Your protected dump was successfully created as
-	echo %FOLDER%\%FILENAME%%EXTZIP%
-	echo.
 
-	GOTO end
+
+
+:exec
+
+	::::: ################# EXECUTION #################
+	::::: #                                           #
+	::::: # Changes in this section are not recommend #
+	::::: # unless you know what you are doing        #
+	::::: #                                           #
+	::::: #############################################
+	
+	
+	::::: GENERATE THE RAW DUMP
+	
+		echo.
+		echo Generating database DUMP ...
+		mysqldump -u%USER% -p%PASSWORD% -h%HOST% --default-character-set=%ENCODING% --add-drop-table --opt %DATABASE% -r "%FOLDER%\%FILENAME%%EXTSQL%"
+	
+		IF NOT EXIST "%FOLDER%\%FILENAME%%EXTSQL%" GOTO dump_error
+	
+		echo DUMP succesfully generated!!!
+	
+	::::: COMPRESS DUMP IN A PASSWORD PROTECTED ZIP FILE
+	
+		echo.
+		echo Compressing dump ...
+		cd %FOLDER%
+		IF "%ZIP_PWD%" == "" (
+			"%WORKINGDIR%\7za.exe" -mx9 -p a "%FOLDER%\%FILENAME%%EXTZIP%" "%FOLDER%\%FILENAME%%EXTSQL%"
+		) ELSE (
+			"%WORKINGDIR%\7za.exe" -mx9 -p%ZIP_PWD% a "%FOLDER%\%FILENAME%%EXTZIP%" "%FOLDER%\%FILENAME%%EXTSQL%"
+		)
+		
+	
+		IF NOT EXIST "%FOLDER%\%FILENAME%%EXTSQL%" GOTO zip_error
+	
+		echo DUMP succesfully compressed
+	
+	::::: DELETE THE RAW DUMP, LEAVING ONLY THE PROTECTED ZIP FILE
+	
+		echo.
+		echo Deleting DUMP raw file...
+		del "%FOLDER%\%FILENAME%%EXTSQL%"
+	
+		echo.
+		echo Your protected dump was successfully created as
+		echo %FOLDER%\%FILENAME%%EXTZIP%
+		echo.
+	
+		GOTO end
+
+GOTO:eof
+
+
+
+
+
+
+GOTO end
+
+
 
 
 
@@ -177,8 +198,10 @@ GOTO end
 GOTO end
 
 
-::::: END POINT
 
+
+
+
+::::: END OF THE SCRIPT
 :end
 echo.
-
