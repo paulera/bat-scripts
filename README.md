@@ -20,6 +20,10 @@ A additional calls to *cdd* does not overwrite the previous one. You can do it m
 I use this script to keep track of my arrival times at work (at least, the moment when my computer logged in, which is a good approach). Just place it in the _Startup folder_ (in Windows 7 it should be `*%USERPROFILE%*\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup`) and the data will be written in your home folder, in a file called __checkin.txt__.
 
 <hr>
+#### <a href="http://www.flaticon.com/authors/icons8">![icon credit: Icons8](http://cdn.flaticon.com/png/24/15563.png)</a> [ektronsearchupgrade.bat : Runs the SearchUpgrade.exe tool for ektron sites] (https://github.com/paulera/bat-scripts/blob/master/ektronsearchupgrade.bat)
+The SearchUpgrade toll in Ektron is used to fix Search Results for PageBuilder Pages (https://portal.ektron.com/kb/1032/). Still want to improve it to get the values directly from the web.config file.
+
+<hr>
 ####<a href="http://www.flaticon.com/authors/designmodo">![icon credit: designmodo](http://cdn.flaticon.com/png/32/25406.png)</a>[hgchg.bat : list changes in a Mercurial repository] (https://github.com/paulera/bat-scripts/blob/master/hgchg.bat)
 Handy script if you work with the Mercurial version control system. You can run `hgchg /help` for usage instructions.
 
